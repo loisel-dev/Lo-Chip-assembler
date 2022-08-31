@@ -1,0 +1,55 @@
+plugins {
+    id 'java'
+}
+
+group 'de.loisel.chip'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.9.0'
+}
+
+sourceCompatibility = '17'
+targetCompatibility = '17'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+}
+
+test {
+    useJUnitPlatform()
+}
+
+task runApp(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+
+    mainClass = 'de.loisel.chip.assembler.Assembler'
+
+    // arguments to pass to the application
+    args '"D:\\dev\\workspaces\\lo-chip\\Lo-Chip-assembler\\src\\test\\resources\\simple-test.asm" "D:\\dev\\workspaces\\lo-chip\\Lo-Chip-assembler\\testoutput\\simple-test.bin"'
+}
+
+jar {
+    manifest {
+        attributes('Main-Class': 'package.Main')
+    }
+}
+
+task runExecutableJar(type: JavaExec) {
+    // Executable jars can have only _one_ jar on the classpath.
+    classpath = files(tasks.jar)
+
+    // 'main' does not need to be specified
+
+    // arguments to pass to the application
+    args 'appArg1'
+}
