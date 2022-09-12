@@ -24,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class AssemblerFileTest {
 
-    private final String SMPL_FILE = "error-test.asm";
+    private final String SMPL_FILE = "16b-addFunction.asm";
+    private final String SMPL_OUT_FILE = "16b-addFunction.bin";
 
     String resourcePath;
 
@@ -38,7 +39,7 @@ class AssemblerFileTest {
     @Test
     void simpleAsmTest() {
         Assembler assembler = new Assembler();
-        byte[] program = assembler.assemble(resourcePath + SMPL_FILE);
+        byte[] program = assembler.assemble(resourcePath + SMPL_FILE, resourcePath + SMPL_OUT_FILE);
     }
 
 }

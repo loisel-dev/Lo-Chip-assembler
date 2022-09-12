@@ -172,7 +172,9 @@ public class Assembler {
             }
             case "JP": {
                 if(hasArgs(args, lineNum, 1, command)) {
-                    if(args[0].equals("Rx")) {
+                    if(args[0].equals("I") && args[1].equals("F")) {
+                        addOpcode(0x11);                                              // $11 - JP I, F
+                    } else if(args[0].equals("Rx")) {
                         addOpcode(0xB0);                                              // $B0 - JP Rx, addr
                         addWord(args[1]);
                     } else if(labels.containsKey(args[0])) {
@@ -439,8 +441,8 @@ public class Assembler {
     }
 
     private void addLabel(String name) {
-        addOpcode(0x00); addOpcode(0x00);
-        labels.get(name).callLocations.add((short) (programBuff.size() - 1));
+        addOpcode(0x00); addOpcode(0x00); // placeholder. Gets filled later in insertLabelAddresses()
+        labels.get(name).callLocations.add((short) (programBuff.size() - 2));
     }
 
     private void addByte(String byteStr) {
@@ -513,7 +515,7 @@ public class Assembler {
         List<String> cleaned = new ArrayList<>();
 
         for (String line : asmFile) {
-            if(line.indexOf(';') > -1)
+            if(line.contains(";"))
                 line = line.substring(0, line.indexOf(';'));
             line = line.strip();
             line = line.replace('\t', ' ');
